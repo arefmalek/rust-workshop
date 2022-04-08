@@ -44,8 +44,8 @@ impl MainState {
         draw_text(
             &self.top_score.to_string(), 
             10.0,
-            10.0,
-            5.0,
+            100.0,
+            100.0,
             WHITE
         );
 
@@ -53,8 +53,8 @@ impl MainState {
         draw_text(
             &self.bottom_score.to_string(), 
             10.0,
-            screen_height() - 10.0,
-            5.0,
+            screen_height() - 100.0,
+            100.0,
             WHITE
                  );
  
@@ -72,6 +72,9 @@ impl MainState {
                 self.y_vel *= -1.0;
                 self.color = RED;
             }
+
+
+        // bouncing off horizontal borders
         if self.ball.left()  <= 0.0 
             || self.ball.right() >= screen_width() {
                 self.x_vel *= -1.0;
@@ -91,7 +94,7 @@ impl MainState {
             self.top_paddle.x -= 10.0;
         }
         if is_key_down(KeyCode::D) 
-        && self.top_paddle.right() <= screen_width()
+        && self.bottom_paddle.right() <= screen_width()
         {
             self.bottom_paddle.x += 10.0;
         }
