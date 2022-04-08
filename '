@@ -18,15 +18,12 @@ struct MainState {
 // add methods to mainstate
 impl MainState {
     fn draw(&self) {
-        // draw the ball
         draw_rectangle(
             self.ball.x,
             self.ball.y,
             self.ball.w,
             self.ball.h,
             self.color);
-
-        // draw paddles
         draw_rectangle(
             self.top_paddle.x,
             self.top_paddle.y,
@@ -39,25 +36,6 @@ impl MainState {
             self.bottom_paddle.w,
             self.bottom_paddle.h,
             self.color);
-
-        // draw text
-        draw_text(
-            &self.top_score.to_string(), 
-            10.0,
-            10.0,
-            5.0,
-            WHITE
-        );
-
-        // draw text
-        draw_text(
-            &self.bottom_score.to_string(), 
-            10.0,
-            screen_height() - 10.0,
-            5.0,
-            WHITE
-                 );
- 
     }
 
     // only accepts a mutable reference
@@ -145,7 +123,7 @@ async fn main() {
             10.0,
                              ),
         top_score: 0,
-        bottom_score: 0,
+        bottom_score: 0
         color: WHITE,
     };
 
