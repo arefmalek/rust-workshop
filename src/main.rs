@@ -12,6 +12,8 @@ struct MainState {
     bottom_score: usize,
 
     // my addition to color
+    top_paddle_color: Color,
+    bottom_paddle_color: Color,
     color: Color,
 }
 
@@ -32,13 +34,13 @@ impl MainState {
             self.top_paddle.y,
             self.top_paddle.w,
             self.top_paddle.h,
-            self.color);
+            self.top_paddle_color);
         draw_rectangle(        
             self.bottom_paddle.x,
             self.bottom_paddle.y,
             self.bottom_paddle.w,
             self.bottom_paddle.h,
-            self.color);
+            self.bottom_paddle_color);
 
         // draw text
         draw_text(
@@ -69,18 +71,18 @@ impl MainState {
         // touches the top of the screen, flip y_velocity
         if self.ball.overlaps(&self.top_paddle)
         || self.ball.overlaps(&self.bottom_paddle) {
+            if self.ball.overlaps(&self.top_paddle) {
+
+            }
                 self.y_vel *= -1.0;
                 self.color = RED;
-            }
-
+        }
 
         // bouncing off horizontal borders
         if self.ball.left()  <= 0.0 
-            || self.ball.right() >= screen_width() {
+        || self.ball.right() >= screen_width() {
                 self.x_vel *= -1.0;
-                self.color = BLUE;
         }
-
 
         // update paddles
         if is_key_down(KeyCode::Right) 
@@ -104,25 +106,35 @@ impl MainState {
             self.bottom_paddle.x -= 10.0;
         }
 
-
         // if ball disappears, restart
         if self.ball.bottom() <= 0.0
-            || self.ball.top() >= screen_height() {
+        || self.ball.top() >= screen_height() {
+                // ball goes thru top of scren
+                if self.ball.bottom() <= 0.0 { 
+                    println!("bottom paddle score increase");
+                    self.bottom_score+= 1
+                }
+                // ball goes thru top of scren
+                else if self.ball.top() >= screen_height() {
+                    println!("top paddle score increase");
+                    self.top_score += 1
+                }
+
+
+                // standard updates to the ball 
                 self.ball.x = screen_width() / 2.0;
                 self.ball.y = screen_height() / 2.0;
 
                 self.x_vel *= -1.0;
                 self.y_vel *= -1.0;
-            }
 
+        }
     }
 
 }
 
 #[macroquad::main("Pong")]
 async fn main() {
-
-
     // initialize y as an immutable 32 bit float
     // the type is automatically inferenced
 
@@ -149,6 +161,9 @@ async fn main() {
                              ),
         top_score: 0,
         bottom_score: 0,
+
+        top_paddle_color: RED,
+        bottom_paddle_color: BLUE,
         color: WHITE,
     };
 
@@ -159,11 +174,8 @@ async fn main() {
 
         main_state.draw();
 
-        // draw the rectangle at x, y (10, 10 rectangle)
         main_state.update();
 
-        // check for collisions
-        
         // wait for next frame
         next_frame().await;
     }
