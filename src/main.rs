@@ -34,7 +34,8 @@ impl MainState {
             self.top_paddle.y,
             self.top_paddle.w,
             self.top_paddle.h,
-            self.top_paddle_color);
+            self.top_paddle_color
+            );
         draw_rectangle(        
             self.bottom_paddle.x,
             self.bottom_paddle.y,
@@ -48,7 +49,7 @@ impl MainState {
             10.0,
             100.0,
             100.0,
-            WHITE
+            self.top_paddle_color
         );
 
         // draw text
@@ -57,7 +58,7 @@ impl MainState {
             10.0,
             screen_height() - 100.0,
             100.0,
-            WHITE
+            self.bottom_paddle_color
                  );
  
     }
@@ -72,10 +73,12 @@ impl MainState {
         if self.ball.overlaps(&self.top_paddle)
         || self.ball.overlaps(&self.bottom_paddle) {
             if self.ball.overlaps(&self.top_paddle) {
-
+                self.color = self.top_paddle_color;
+            }
+            else if self.ball.overlaps(&self.bottom_paddle) {
+                self.color = self.bottom_paddle_color;
             }
                 self.y_vel *= -1.0;
-                self.color = RED;
         }
 
         // bouncing off horizontal borders
@@ -111,12 +114,10 @@ impl MainState {
         || self.ball.top() >= screen_height() {
                 // ball goes thru top of scren
                 if self.ball.bottom() <= 0.0 { 
-                    println!("bottom paddle score increase");
                     self.bottom_score+= 1
                 }
                 // ball goes thru top of scren
                 else if self.ball.top() >= screen_height() {
-                    println!("top paddle score increase");
                     self.top_score += 1
                 }
 
